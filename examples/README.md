@@ -5,7 +5,7 @@
 [`bedroom-remote.dashboard.json`](bedroom-remote.dashboard.json) is a dashboard for the platform console's Visualizer that works as a remote for one TV: `bedroom` on bridge `ATV-V7Q-NB9`. Import it from the Visualizer's **Import**.
 
 - **Status:** connected or offline, on or off, and the current app, volume and model, all read from the TV's key in `atv_state`.
-- **Controls:** power on and off, a D-pad with Back, Home, Menu and Settings, playback, volume, three app shortcuts, and a box for typing text.
+- **Controls:** power on and off, a D-pad with Back, Home, Menu and Settings, playback, volume, three app shortcuts, and a box for typing text. Each group is one Button Pad widget, so it keeps its shape on a phone. Import needs a console version that has the Button Pad widget.
 
 The buttons publish without waiting for a reply, so an error, such as the TV being offline, shows on the Connection tile rather than on the button.
 

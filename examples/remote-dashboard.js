@@ -7,11 +7,21 @@ let n = 0
 const id = () => `widget_remote_${++n}`
 const common = (title, x, y, w, h) => ({ id: id(), title, x, y, w, h, dataSource: { type: 'subscription' }, buffer: { maxCount: 10 } })
 
-const button = (title, label, x, y, subject, payload, color, w = 2, h = 2) => ({
-  ...common(title, x, y, w, h), type: 'button',
-  buttonConfig: { label, publishSubject: subject, payload: JSON.stringify(payload), actionType: 'publish', timeout: 2000, ...(color ? { color } : {}) },
+// A button pad keeps its shape on a phone, where separate buttons are paired
+// two to a row. `cells` is rows of [label, subject suffix, payload, colour];
+// null is a gap.
+const pad = (title, x, y, w, h, cells) => ({
+  ...common(title, x, y, w, h), type: 'buttonpad',
+  buttonpadConfig: {
+    rows: cells.length,
+    cols: Math.max(...cells.map(r => r.length)),
+    cells: cells.flatMap((r, row) => r.flatMap((c, col) => c
+      ? [{ row, col, label: c[0], subject: `${base}.${c[1]}`, payload: JSON.stringify(c[2]), color: c[3] }]
+      : [])),
+  },
 })
-const key = (label, k, x, y, color, w, h) => button(label, label, x, y, `${base}.key`, { key: k }, color, w, h)
+const key = (label, k, color) => [label, 'key', { key: k }, color]
+const app = (label, pkg, color) => [label, 'launch', { app: pkg }, color]
 
 const status = (title, x, y, path, mappings) => ({
   ...common(title, x, y, 3, 2), type: 'status', jsonPath: path,
@@ -34,11 +44,12 @@ const widgets = [
     { value: 'true', color: 'var(--color-success)', label: 'On' },
     { value: 'false', color: 'var(--muted)', label: 'Off' },
   ]),
-  button('Power on', 'On', 6, 0, `${base}.power`, { on: true }, GREEN, 3),
-  button('Power off', 'Off', 9, 0, `${base}.power`, { on: false }, RED, 3),
+  pad('Power buttons', 6, 0, 6, 2, [[
+    ['On', 'power', { on: true }, GREEN], ['Off', 'power', { on: false }, RED],
+  ]]),
 
   // Left: now playing
-  { ...common('Now playing', 0, 2, 6, 4), type: 'markdown',
+  { ...common('Now playing', 0, 2, 6, 6), type: 'markdown',
     dataSource: { type: 'kv', kvBucket: 'atv_state', kvKey: stateKey },
     markdownConfig: { content: [
       '**App:** `{{app}}`',
@@ -51,21 +62,29 @@ const widgets = [
     ].join('\n') } },
 
   // Right: D-pad
-  key('Back', 'BACK', 6, 2, GREY), key('Up', 'DPAD_UP', 8, 2, NAV), key('Home', 'HOME', 10, 2, GREY),
-  key('Left', 'DPAD_LEFT', 6, 4, NAV), key('OK', 'DPAD_CENTER', 8, 4, OK), key('Right', 'DPAD_RIGHT', 10, 4, NAV),
-  key('Menu', 'MENU', 6, 6, GREY), key('Down', 'DPAD_DOWN', 8, 6, NAV), key('Settings', 'SETTINGS', 10, 6, GREY),
-
-  // Left: apps
-  button('YouTube', 'YouTube', 0, 6, `${base}.launch`, { app: 'com.google.android.youtube.tv' }, RED),
-  button('Netflix', 'Netflix', 2, 6, `${base}.launch`, { app: 'com.netflix.ninja' }, '#b91c1c'),
-  button('Prime Video', 'Prime', 4, 6, `${base}.launch`, { app: 'com.amazon.amazonvideo.livingroom' }, '#0369a1'),
+  pad('Navigation', 6, 2, 6, 6, [
+    [key('Back', 'BACK', GREY), key('↑', 'DPAD_UP', NAV), key('Home', 'HOME', GREY)],
+    [key('←', 'DPAD_LEFT', NAV), key('OK', 'DPAD_CENTER', OK), key('→', 'DPAD_RIGHT', NAV)],
+    [key('Menu', 'MENU', GREY), key('↓', 'DPAD_DOWN', NAV), key('Settings', 'SETTINGS', GREY)],
+  ]),
 
   // Row 8: playback and volume
-  key('Rewind', 'MEDIA_REWIND', 0, 8, MEDIA), key('Play/Pause', 'MEDIA_PLAY_PAUSE', 2, 8, MEDIA), key('Fast forward', 'MEDIA_FAST_FORWARD', 4, 8, MEDIA),
-  key('Volume down', 'VOLUME_DOWN', 6, 8, GREY), key('Mute', 'VOLUME_MUTE', 8, 8, GREY), key('Volume up', 'VOLUME_UP', 10, 8, GREY),
+  pad('Playback', 0, 8, 6, 2, [[
+    key('Rewind', 'MEDIA_REWIND', MEDIA), key('Play/Pause', 'MEDIA_PLAY_PAUSE', MEDIA), key('Forward', 'MEDIA_FAST_FORWARD', MEDIA),
+  ]]),
+  pad('Volume', 6, 8, 6, 2, [[
+    key('Vol −', 'VOLUME_DOWN', GREY), key('Mute', 'VOLUME_MUTE', GREY), key('Vol +', 'VOLUME_UP', GREY),
+  ]]),
 
-  // Row 10: typing
-  { ...common('Type text', 0, 10, 12, 4), type: 'publisher',
+  // Row 10: apps
+  pad('Apps', 0, 10, 12, 2, [[
+    app('YouTube', 'com.google.android.youtube.tv', RED),
+    app('Netflix', 'com.netflix.ninja', '#b91c1c'),
+    app('Prime Video', 'com.amazon.amazonvideo.livingroom', '#0369a1'),
+  ]]),
+
+  // Row 12: typing
+  { ...common('Type text', 0, 12, 12, 4), type: 'publisher',
     publisherConfig: { defaultSubject: `${base}.text`, defaultPayload: '{"text": "type here"}', history: [], timeout: 2000 } },
 ]
 

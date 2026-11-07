@@ -5,8 +5,8 @@
       "id": "dashboard_bedroom_remote",
       "name": "Bedroom TV remote",
       "description": "Remote for bedroom on atv-bridge ATV-V7Q-NB9. Needs publish on atv.ATV-V7Q-NB9.bedroom.> and read on the atv_state KV bucket.",
-      "created": 1794091349940,
-      "modified": 1794091349940,
+      "created": 1794093149231,
+      "modified": 1794093149231,
       "widgets": [
         {
           "id": "widget_remote_1",
@@ -88,10 +88,10 @@
         },
         {
           "id": "widget_remote_3",
-          "title": "Power on",
+          "title": "Power buttons",
           "x": 6,
           "y": 0,
-          "w": 3,
+          "w": 6,
           "h": 2,
           "dataSource": {
             "type": "subscription"
@@ -99,46 +99,37 @@
           "buffer": {
             "maxCount": 10
           },
-          "type": "button",
-          "buttonConfig": {
-            "label": "On",
-            "publishSubject": "atv.ATV-V7Q-NB9.bedroom.power",
-            "payload": "{\"on\":true}",
-            "actionType": "publish",
-            "timeout": 2000,
-            "color": "#16a34a"
+          "type": "buttonpad",
+          "buttonpadConfig": {
+            "rows": 1,
+            "cols": 2,
+            "cells": [
+              {
+                "row": 0,
+                "col": 0,
+                "label": "On",
+                "subject": "atv.ATV-V7Q-NB9.bedroom.power",
+                "payload": "{\"on\":true}",
+                "color": "#16a34a"
+              },
+              {
+                "row": 0,
+                "col": 1,
+                "label": "Off",
+                "subject": "atv.ATV-V7Q-NB9.bedroom.power",
+                "payload": "{\"on\":false}",
+                "color": "#dc2626"
+              }
+            ]
           }
         },
         {
           "id": "widget_remote_4",
-          "title": "Power off",
-          "x": 9,
-          "y": 0,
-          "w": 3,
-          "h": 2,
-          "dataSource": {
-            "type": "subscription"
-          },
-          "buffer": {
-            "maxCount": 10
-          },
-          "type": "button",
-          "buttonConfig": {
-            "label": "Off",
-            "publishSubject": "atv.ATV-V7Q-NB9.bedroom.power",
-            "payload": "{\"on\":false}",
-            "actionType": "publish",
-            "timeout": 2000,
-            "color": "#dc2626"
-          }
-        },
-        {
-          "id": "widget_remote_5",
           "title": "Now playing",
           "x": 0,
           "y": 2,
           "w": 6,
-          "h": 4,
+          "h": 6,
           "dataSource": {
             "type": "kv",
             "kvBucket": "atv_state",
@@ -153,11 +144,104 @@
           }
         },
         {
-          "id": "widget_remote_6",
-          "title": "Back",
+          "id": "widget_remote_5",
+          "title": "Navigation",
           "x": 6,
           "y": 2,
-          "w": 2,
+          "w": 6,
+          "h": 6,
+          "dataSource": {
+            "type": "subscription"
+          },
+          "buffer": {
+            "maxCount": 10
+          },
+          "type": "buttonpad",
+          "buttonpadConfig": {
+            "rows": 3,
+            "cols": 3,
+            "cells": [
+              {
+                "row": 0,
+                "col": 0,
+                "label": "Back",
+                "subject": "atv.ATV-V7Q-NB9.bedroom.key",
+                "payload": "{\"key\":\"BACK\"}",
+                "color": "#475569"
+              },
+              {
+                "row": 0,
+                "col": 1,
+                "label": "↑",
+                "subject": "atv.ATV-V7Q-NB9.bedroom.key",
+                "payload": "{\"key\":\"DPAD_UP\"}",
+                "color": "#2563eb"
+              },
+              {
+                "row": 0,
+                "col": 2,
+                "label": "Home",
+                "subject": "atv.ATV-V7Q-NB9.bedroom.key",
+                "payload": "{\"key\":\"HOME\"}",
+                "color": "#475569"
+              },
+              {
+                "row": 1,
+                "col": 0,
+                "label": "←",
+                "subject": "atv.ATV-V7Q-NB9.bedroom.key",
+                "payload": "{\"key\":\"DPAD_LEFT\"}",
+                "color": "#2563eb"
+              },
+              {
+                "row": 1,
+                "col": 1,
+                "label": "OK",
+                "subject": "atv.ATV-V7Q-NB9.bedroom.key",
+                "payload": "{\"key\":\"DPAD_CENTER\"}",
+                "color": "#7c3aed"
+              },
+              {
+                "row": 1,
+                "col": 2,
+                "label": "→",
+                "subject": "atv.ATV-V7Q-NB9.bedroom.key",
+                "payload": "{\"key\":\"DPAD_RIGHT\"}",
+                "color": "#2563eb"
+              },
+              {
+                "row": 2,
+                "col": 0,
+                "label": "Menu",
+                "subject": "atv.ATV-V7Q-NB9.bedroom.key",
+                "payload": "{\"key\":\"MENU\"}",
+                "color": "#475569"
+              },
+              {
+                "row": 2,
+                "col": 1,
+                "label": "↓",
+                "subject": "atv.ATV-V7Q-NB9.bedroom.key",
+                "payload": "{\"key\":\"DPAD_DOWN\"}",
+                "color": "#2563eb"
+              },
+              {
+                "row": 2,
+                "col": 2,
+                "label": "Settings",
+                "subject": "atv.ATV-V7Q-NB9.bedroom.key",
+                "payload": "{\"key\":\"SETTINGS\"}",
+                "color": "#475569"
+              }
+            ]
+          }
+        },
+        {
+          "id": "widget_remote_6",
+          "title": "Playback",
+          "x": 0,
+          "y": 8,
+          "w": 6,
           "h": 2,
           "dataSource": {
             "type": "subscription"
@@ -165,22 +249,44 @@
           "buffer": {
             "maxCount": 10
           },
-          "type": "button",
-          "buttonConfig": {
-            "label": "Back",
-            "publishSubject": "atv.ATV-V7Q-NB9.bedroom.key",
-            "payload": "{\"key\":\"BACK\"}",
-            "actionType": "publish",
-            "timeout": 2000,
-            "color": "#475569"
+          "type": "buttonpad",
+          "buttonpadConfig": {
+            "rows": 1,
+            "cols": 3,
+            "cells": [
+              {
+                "row": 0,
+                "col": 0,
+                "label": "Rewind",
+                "subject": "atv.ATV-V7Q-NB9.bedroom.key",
+                "payload": "{\"key\":\"MEDIA_REWIND\"}",
+                "color": "#0f766e"
+              },
+              {
+                "row": 0,
+                "col": 1,
+                "label": "Play/Pause",
+                "subject": "atv.ATV-V7Q-NB9.bedroom.key",
+                "payload": "{\"key\":\"MEDIA_PLAY_PAUSE\"}",
+                "color": "#0f766e"
+              },
+              {
+                "row": 0,
+                "col": 2,
+                "label": "Forward",
+                "subject": "atv.ATV-V7Q-NB9.bedroom.key",
+                "payload": "{\"key\":\"MEDIA_FAST_FORWARD\"}",
+                "color": "#0f766e"
+              }
+            ]
           }
         },
         {
           "id": "widget_remote_7",
-          "title": "Up",
-          "x": 8,
-          "y": 2,
-          "w": 2,
+          "title": "Volume",
+          "x": 6,
+          "y": 8,
+          "w": 6,
           "h": 2,
           "dataSource": {
             "type": "subscription"
@@ -188,22 +294,44 @@
           "buffer": {
             "maxCount": 10
           },
-          "type": "button",
-          "buttonConfig": {
-            "label": "Up",
-            "publishSubject": "atv.ATV-V7Q-NB9.bedroom.key",
-            "payload": "{\"key\":\"DPAD_UP\"}",
-            "actionType": "publish",
-            "timeout": 2000,
-            "color": "#2563eb"
+          "type": "buttonpad",
+          "buttonpadConfig": {
+            "rows": 1,
+            "cols": 3,
+            "cells": [
+              {
+                "row": 0,
+                "col": 0,
+                "label": "Vol −",
+                "subject": "atv.ATV-V7Q-NB9.bedroom.key",
+                "payload": "{\"key\":\"VOLUME_DOWN\"}",
+                "color": "#475569"
+              },
+              {
+                "row": 0,
+                "col": 1,
+                "label": "Mute",
+                "subject": "atv.ATV-V7Q-NB9.bedroom.key",
+                "payload": "{\"key\":\"VOLUME_MUTE\"}",
+                "color": "#475569"
+              },
+              {
+                "row": 0,
+                "col": 2,
+                "label": "Vol +",
+                "subject": "atv.ATV-V7Q-NB9.bedroom.key",
+                "payload": "{\"key\":\"VOLUME_UP\"}",
+                "color": "#475569"
+              }
+            ]
           }
         },
         {
           "id": "widget_remote_8",
-          "title": "Home",
-          "x": 10,
-          "y": 2,
-          "w": 2,
+          "title": "Apps",
+          "x": 0,
+          "y": 10,
+          "w": 12,
           "h": 2,
           "dataSource": {
             "type": "subscription"
@@ -211,366 +339,43 @@
           "buffer": {
             "maxCount": 10
           },
-          "type": "button",
-          "buttonConfig": {
-            "label": "Home",
-            "publishSubject": "atv.ATV-V7Q-NB9.bedroom.key",
-            "payload": "{\"key\":\"HOME\"}",
-            "actionType": "publish",
-            "timeout": 2000,
-            "color": "#475569"
+          "type": "buttonpad",
+          "buttonpadConfig": {
+            "rows": 1,
+            "cols": 3,
+            "cells": [
+              {
+                "row": 0,
+                "col": 0,
+                "label": "YouTube",
+                "subject": "atv.ATV-V7Q-NB9.bedroom.launch",
+                "payload": "{\"app\":\"com.google.android.youtube.tv\"}",
+                "color": "#dc2626"
+              },
+              {
+                "row": 0,
+                "col": 1,
+                "label": "Netflix",
+                "subject": "atv.ATV-V7Q-NB9.bedroom.launch",
+                "payload": "{\"app\":\"com.netflix.ninja\"}",
+                "color": "#b91c1c"
+              },
+              {
+                "row": 0,
+                "col": 2,
+                "label": "Prime Video",
+                "subject": "atv.ATV-V7Q-NB9.bedroom.launch",
+                "payload": "{\"app\":\"com.amazon.amazonvideo.livingroom\"}",
+                "color": "#0369a1"
+              }
+            ]
           }
         },
         {
           "id": "widget_remote_9",
-          "title": "Left",
-          "x": 6,
-          "y": 4,
-          "w": 2,
-          "h": 2,
-          "dataSource": {
-            "type": "subscription"
-          },
-          "buffer": {
-            "maxCount": 10
-          },
-          "type": "button",
-          "buttonConfig": {
-            "label": "Left",
-            "publishSubject": "atv.ATV-V7Q-NB9.bedroom.key",
-            "payload": "{\"key\":\"DPAD_LEFT\"}",
-            "actionType": "publish",
-            "timeout": 2000,
-            "color": "#2563eb"
-          }
-        },
-        {
-          "id": "widget_remote_10",
-          "title": "OK",
-          "x": 8,
-          "y": 4,
-          "w": 2,
-          "h": 2,
-          "dataSource": {
-            "type": "subscription"
-          },
-          "buffer": {
-            "maxCount": 10
-          },
-          "type": "button",
-          "buttonConfig": {
-            "label": "OK",
-            "publishSubject": "atv.ATV-V7Q-NB9.bedroom.key",
-            "payload": "{\"key\":\"DPAD_CENTER\"}",
-            "actionType": "publish",
-            "timeout": 2000,
-            "color": "#7c3aed"
-          }
-        },
-        {
-          "id": "widget_remote_11",
-          "title": "Right",
-          "x": 10,
-          "y": 4,
-          "w": 2,
-          "h": 2,
-          "dataSource": {
-            "type": "subscription"
-          },
-          "buffer": {
-            "maxCount": 10
-          },
-          "type": "button",
-          "buttonConfig": {
-            "label": "Right",
-            "publishSubject": "atv.ATV-V7Q-NB9.bedroom.key",
-            "payload": "{\"key\":\"DPAD_RIGHT\"}",
-            "actionType": "publish",
-            "timeout": 2000,
-            "color": "#2563eb"
-          }
-        },
-        {
-          "id": "widget_remote_12",
-          "title": "Menu",
-          "x": 6,
-          "y": 6,
-          "w": 2,
-          "h": 2,
-          "dataSource": {
-            "type": "subscription"
-          },
-          "buffer": {
-            "maxCount": 10
-          },
-          "type": "button",
-          "buttonConfig": {
-            "label": "Menu",
-            "publishSubject": "atv.ATV-V7Q-NB9.bedroom.key",
-            "payload": "{\"key\":\"MENU\"}",
-            "actionType": "publish",
-            "timeout": 2000,
-            "color": "#475569"
-          }
-        },
-        {
-          "id": "widget_remote_13",
-          "title": "Down",
-          "x": 8,
-          "y": 6,
-          "w": 2,
-          "h": 2,
-          "dataSource": {
-            "type": "subscription"
-          },
-          "buffer": {
-            "maxCount": 10
-          },
-          "type": "button",
-          "buttonConfig": {
-            "label": "Down",
-            "publishSubject": "atv.ATV-V7Q-NB9.bedroom.key",
-            "payload": "{\"key\":\"DPAD_DOWN\"}",
-            "actionType": "publish",
-            "timeout": 2000,
-            "color": "#2563eb"
-          }
-        },
-        {
-          "id": "widget_remote_14",
-          "title": "Settings",
-          "x": 10,
-          "y": 6,
-          "w": 2,
-          "h": 2,
-          "dataSource": {
-            "type": "subscription"
-          },
-          "buffer": {
-            "maxCount": 10
-          },
-          "type": "button",
-          "buttonConfig": {
-            "label": "Settings",
-            "publishSubject": "atv.ATV-V7Q-NB9.bedroom.key",
-            "payload": "{\"key\":\"SETTINGS\"}",
-            "actionType": "publish",
-            "timeout": 2000,
-            "color": "#475569"
-          }
-        },
-        {
-          "id": "widget_remote_15",
-          "title": "YouTube",
-          "x": 0,
-          "y": 6,
-          "w": 2,
-          "h": 2,
-          "dataSource": {
-            "type": "subscription"
-          },
-          "buffer": {
-            "maxCount": 10
-          },
-          "type": "button",
-          "buttonConfig": {
-            "label": "YouTube",
-            "publishSubject": "atv.ATV-V7Q-NB9.bedroom.launch",
-            "payload": "{\"app\":\"com.google.android.youtube.tv\"}",
-            "actionType": "publish",
-            "timeout": 2000,
-            "color": "#dc2626"
-          }
-        },
-        {
-          "id": "widget_remote_16",
-          "title": "Netflix",
-          "x": 2,
-          "y": 6,
-          "w": 2,
-          "h": 2,
-          "dataSource": {
-            "type": "subscription"
-          },
-          "buffer": {
-            "maxCount": 10
-          },
-          "type": "button",
-          "buttonConfig": {
-            "label": "Netflix",
-            "publishSubject": "atv.ATV-V7Q-NB9.bedroom.launch",
-            "payload": "{\"app\":\"com.netflix.ninja\"}",
-            "actionType": "publish",
-            "timeout": 2000,
-            "color": "#b91c1c"
-          }
-        },
-        {
-          "id": "widget_remote_17",
-          "title": "Prime Video",
-          "x": 4,
-          "y": 6,
-          "w": 2,
-          "h": 2,
-          "dataSource": {
-            "type": "subscription"
-          },
-          "buffer": {
-            "maxCount": 10
-          },
-          "type": "button",
-          "buttonConfig": {
-            "label": "Prime",
-            "publishSubject": "atv.ATV-V7Q-NB9.bedroom.launch",
-            "payload": "{\"app\":\"com.amazon.amazonvideo.livingroom\"}",
-            "actionType": "publish",
-            "timeout": 2000,
-            "color": "#0369a1"
-          }
-        },
-        {
-          "id": "widget_remote_18",
-          "title": "Rewind",
-          "x": 0,
-          "y": 8,
-          "w": 2,
-          "h": 2,
-          "dataSource": {
-            "type": "subscription"
-          },
-          "buffer": {
-            "maxCount": 10
-          },
-          "type": "button",
-          "buttonConfig": {
-            "label": "Rewind",
-            "publishSubject": "atv.ATV-V7Q-NB9.bedroom.key",
-            "payload": "{\"key\":\"MEDIA_REWIND\"}",
-            "actionType": "publish",
-            "timeout": 2000,
-            "color": "#0f766e"
-          }
-        },
-        {
-          "id": "widget_remote_19",
-          "title": "Play/Pause",
-          "x": 2,
-          "y": 8,
-          "w": 2,
-          "h": 2,
-          "dataSource": {
-            "type": "subscription"
-          },
-          "buffer": {
-            "maxCount": 10
-          },
-          "type": "button",
-          "buttonConfig": {
-            "label": "Play/Pause",
-            "publishSubject": "atv.ATV-V7Q-NB9.bedroom.key",
-            "payload": "{\"key\":\"MEDIA_PLAY_PAUSE\"}",
-            "actionType": "publish",
-            "timeout": 2000,
-            "color": "#0f766e"
-          }
-        },
-        {
-          "id": "widget_remote_20",
-          "title": "Fast forward",
-          "x": 4,
-          "y": 8,
-          "w": 2,
-          "h": 2,
-          "dataSource": {
-            "type": "subscription"
-          },
-          "buffer": {
-            "maxCount": 10
-          },
-          "type": "button",
-          "buttonConfig": {
-            "label": "Fast forward",
-            "publishSubject": "atv.ATV-V7Q-NB9.bedroom.key",
-            "payload": "{\"key\":\"MEDIA_FAST_FORWARD\"}",
-            "actionType": "publish",
-            "timeout": 2000,
-            "color": "#0f766e"
-          }
-        },
-        {
-          "id": "widget_remote_21",
-          "title": "Volume down",
-          "x": 6,
-          "y": 8,
-          "w": 2,
-          "h": 2,
-          "dataSource": {
-            "type": "subscription"
-          },
-          "buffer": {
-            "maxCount": 10
-          },
-          "type": "button",
-          "buttonConfig": {
-            "label": "Volume down",
-            "publishSubject": "atv.ATV-V7Q-NB9.bedroom.key",
-            "payload": "{\"key\":\"VOLUME_DOWN\"}",
-            "actionType": "publish",
-            "timeout": 2000,
-            "color": "#475569"
-          }
-        },
-        {
-          "id": "widget_remote_22",
-          "title": "Mute",
-          "x": 8,
-          "y": 8,
-          "w": 2,
-          "h": 2,
-          "dataSource": {
-            "type": "subscription"
-          },
-          "buffer": {
-            "maxCount": 10
-          },
-          "type": "button",
-          "buttonConfig": {
-            "label": "Mute",
-            "publishSubject": "atv.ATV-V7Q-NB9.bedroom.key",
-            "payload": "{\"key\":\"VOLUME_MUTE\"}",
-            "actionType": "publish",
-            "timeout": 2000,
-            "color": "#475569"
-          }
-        },
-        {
-          "id": "widget_remote_23",
-          "title": "Volume up",
-          "x": 10,
-          "y": 8,
-          "w": 2,
-          "h": 2,
-          "dataSource": {
-            "type": "subscription"
-          },
-          "buffer": {
-            "maxCount": 10
-          },
-          "type": "button",
-          "buttonConfig": {
-            "label": "Volume up",
-            "publishSubject": "atv.ATV-V7Q-NB9.bedroom.key",
-            "payload": "{\"key\":\"VOLUME_UP\"}",
-            "actionType": "publish",
-            "timeout": 2000,
-            "color": "#475569"
-          }
-        },
-        {
-          "id": "widget_remote_24",
           "title": "Type text",
           "x": 0,
-          "y": 10,
+          "y": 12,
           "w": 12,
           "h": 4,
           "dataSource": {
