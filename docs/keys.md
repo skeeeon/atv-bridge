@@ -12,7 +12,7 @@ nats req atv.site-a.living-room.key '{"key":"KEYCODE_HOME"}'
 ```
 
 - **Names are the Android key codes** in the protocol, with the `KEYCODE_` prefix optional.
-- **Names are case-sensitive.** `HOME` works; `home` gets `400 unknown key`.
+- **Names are case-insensitive**, and so is `direction`. `HOME`, `home` and `keycode_home` are the same key. This page writes them in uppercase, as the protocol does.
 - **A key the TV doesn't handle is still sent.** The reply is `{"ok": true}` because the bridge sent it, not because the TV acted on it. Which keys do something depends on the device and the app in the foreground.
 
 ### Long presses

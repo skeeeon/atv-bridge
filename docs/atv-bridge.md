@@ -186,7 +186,7 @@ nats req atv.site-a.living-room.power '{"on":false}'
 
 | Subject | Request | Does |
 |---|---|---|
-| `atv.{bridge}.{device}.key` | `{"key": "HOME", "direction": "SHORT"}` | Sends one key. Names are case-sensitive; `KEYCODE_` is optional. `direction` is `SHORT` (default), `START_LONG` or `END_LONG`. See [keys](keys.md). |
+| `atv.{bridge}.{device}.key` | `{"key": "HOME", "direction": "SHORT"}` | Sends one key. Names are case-insensitive, and `KEYCODE_` is optional. `direction` is `SHORT` (default), `START_LONG` or `END_LONG`, in any case. See [keys](keys.md). |
 | `atv.{bridge}.{device}.text` | `{"text": "..."}` | Types into the focused field. |
 | `atv.{bridge}.{device}.launch` | `{"app": "..."}` | Opens an app link, or a package id such as `com.google.android.youtube.tv`. |
 | `atv.{bridge}.{device}.power` | `{"on": true}` | Sends POWER only when the TV's state differs. Replies `{"ok": true, "changed": false}` when it didn't need to. |

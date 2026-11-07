@@ -241,8 +241,24 @@ func TestPairThenCommands(t *testing.T) {
 	if m := e.received().GetRemoteKeyInject(); m.GetKeyCode() != pb.RemoteKeyCode_KEYCODE_DPAD_UP || m.GetDirection() != pb.RemoteDirection_START_LONG {
 		t.Errorf("long key: %v", m)
 	}
-	e.wantCode("atv.site-a.lounge.key", `{"key":"NOPE"}`, "400")
-	e.wantCode("atv.site-a.lounge.key", `{"key":"HOME","direction":"SIDEWAYS"}`, "400")
+	// Names are case-insensitive, with or without the prefix.
+	e.mustOK("atv.site-a.lounge.key", `{"key":" keycode_volume_mute ","direction":"end_long"}`)
+	if m := e.received().GetRemoteKeyInject(); m.GetKeyCode() != pb.RemoteKeyCode_KEYCODE_VOLUME_MUTE || m.GetDirection() != pb.RemoteDirection_END_LONG {
+		t.Errorf("lowercase key: %v", m)
+	}
+	e.mustOK("atv.site-a.lounge.key", `{"key":"Media_Play_Pause"}`)
+	if m := e.received().GetRemoteKeyInject(); m.GetKeyCode() != pb.RemoteKeyCode_KEYCODE_MEDIA_PLAY_PAUSE {
+		t.Errorf("mixed-case key: %v", m)
+	}
+	for _, body := range []string{
+		`{"key":"NOPE"}`,
+		`{}`,
+		`{"key":"unknown"}`,
+		`{"key":"HOME","direction":"SIDEWAYS"}`,
+		`{"key":"HOME","direction":"unknown_direction"}`,
+	} {
+		e.wantCode("atv.site-a.lounge.key", body, "400")
+	}
 
 	e.mustOK("atv.site-a.lounge.text", `{"text":"stranger things"}`)
 	if edit := e.received().GetRemoteImeBatchEdit(); edit == nil || edit.GetEditInfo()[0].GetTextFieldStatus().GetValue() != "stranger things" {

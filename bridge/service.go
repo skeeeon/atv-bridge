@@ -11,6 +11,7 @@ import (
 
 	"github.com/nats-io/nats.go/micro"
 
+	pb "github.com/stone-age-io/atv-bridge/third_party/atvremote/proto"
 	"github.com/stone-age-io/atv-bridge/third_party/atvremote/remote"
 )
 
@@ -141,15 +142,19 @@ func handleKey(r *remote.AndroidTVRemote, data []byte) (any, *reqError) {
 	if e := decode(data, &req); e != nil {
 		return nil, e
 	}
-	if req.Direction == "" {
-		req.Direction = "SHORT"
+	// Names are case-insensitive: "home", "Home" and "KEYCODE_HOME" are all
+	// HOME. The protocol's names are all uppercase, so nothing collides.
+	key := strings.ToUpper(strings.TrimSpace(req.Key))
+	direction := strings.ToUpper(strings.TrimSpace(req.Direction))
+	if direction == "" {
+		direction = "SHORT"
 	}
-	code, err := remote.ParseKeyCode(req.Key)
-	if err != nil || req.Key == "" {
-		return nil, badRequest("unknown key %q", req.Key)
+	code, err := remote.ParseKeyCode(key)
+	if err != nil || code == pb.RemoteKeyCode_KEYCODE_UNKNOWN {
+		return nil, badRequest("unknown key %q: see docs/keys.md", req.Key)
 	}
-	dir, err := remote.ParseDirection(req.Direction)
-	if err != nil {
+	dir, err := remote.ParseDirection(direction)
+	if err != nil || dir == pb.RemoteDirection_UNKNOWN_DIRECTION {
 		return nil, badRequest("direction must be SHORT, START_LONG or END_LONG")
 	}
 	return nil, sendErr(r.SendKeyCode(code, dir))
