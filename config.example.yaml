@@ -1,0 +1,20 @@
+# atv-bridge settings. Every key is optional except bridge_id and nats.creds;
+# the values below are the defaults. Each key has an environment variable
+# that overrides it (see docs/atv-bridge.md). TVs are not listed here: they
+# live in the devices KV bucket.
+
+bridge_id: site-a                   # required; a-z, 0-9, - and _
+
+nats:
+  url: nats://localhost:4222        # a local leaf node, or the hub: tls://hub-1:4222,tls://hub-2:4222
+  creds: /creds/user.creds          # required
+  js_domain: ""                     # only if a leaf node runs its own JetStream domain
+
+http_addr: ":8080"                  # /api/ready and /metrics
+session_dir: /session               # the client certificate; keep it on a volume
+client_name: Stone Age bridge       # shown in the TV's paired-devices list
+devices_bucket: atv_devices
+state_bucket: atv_state
+command_timeout: 5s
+pair_timeout: 60s
+heartbeat_interval: 30s             # 0 turns it off
