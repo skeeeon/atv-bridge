@@ -174,6 +174,8 @@ docker run --rm --network host ghcr.io/stone-age-io/atv-bridge:latest discover
 
 Every command is a request. The reply is `{"ok": true}`, or a micro error with a code in the `Nats-Service-Error-Code` header.
 
+**[Keys and Apps](keys.md)** lists every key name, the common ones grouped by what they do, long presses, and how to find an app's package id.
+
 ```bash
 nats req atv.site-a.living-room.key '{"key":"HOME"}'
 nats req atv.site-a.living-room.key '{"key":"DPAD_CENTER","direction":"START_LONG"}'
@@ -184,7 +186,7 @@ nats req atv.site-a.living-room.power '{"on":false}'
 
 | Subject | Request | Does |
 |---|---|---|
-| `atv.{bridge}.{device}.key` | `{"key": "HOME", "direction": "SHORT"}` | Sends one key. `KEYCODE_` is optional. `direction` is `SHORT` (default), `START_LONG` or `END_LONG`. |
+| `atv.{bridge}.{device}.key` | `{"key": "HOME", "direction": "SHORT"}` | Sends one key. Names are case-sensitive; `KEYCODE_` is optional. `direction` is `SHORT` (default), `START_LONG` or `END_LONG`. See [keys](keys.md). |
 | `atv.{bridge}.{device}.text` | `{"text": "..."}` | Types into the focused field. |
 | `atv.{bridge}.{device}.launch` | `{"app": "..."}` | Opens an app link, or a package id such as `com.google.android.youtube.tv`. |
 | `atv.{bridge}.{device}.power` | `{"on": true}` | Sends POWER only when the TV's state differs. Replies `{"ok": true, "changed": false}` when it didn't need to. |

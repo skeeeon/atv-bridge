@@ -27,3 +27,6 @@ option, so the build never needs `protoc`. If they must be regenerated, pass
 
 Copy the two directories again at the new commit, re-apply the patches
 above, update the commit in this file, and run `go test ./...`.
+
+If the update adds or removes key codes, `TestKeysDoc` fails until section 4
+of `docs/keys.md` lists exactly the enum's names again.

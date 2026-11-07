@@ -16,6 +16,8 @@ nats req atv.site-a.living-room.launch '{"app":"com.google.android.youtube.tv"}'
 
 **[Documentation](docs/atv-bridge.md)**: how it works, configuration, permissions, pairing, commands and state.
 
+**[Keys and Apps](docs/keys.md)**: every key name, the common ones, long presses, and app package ids.
+
 It follows the conventions of [stone-age-io/services](https://github.com/stone-age-io/services): one creds file, `/api/ready` and `/metrics`, a `nats micro` service, and one multi-arch image.
 
 ## Develop
