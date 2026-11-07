@@ -73,7 +73,7 @@ Settings come from defaults, then the config file, then environment variables, e
 
 | YAML key | Env var | Default | |
 |---|---|---|---|
-| `bridge_id` | `BRIDGE_ID` | none | **Required.** `a-z 0-9 - _`. Subject token and KV key prefix. |
+| `bridge_id` | `BRIDGE_ID` | none | **Required.** `A-Z a-z 0-9 - _`, case-sensitive: `ATV-V7Q-NB9` and `atv-v7q-nb9` are two bridges. Subject token and KV key prefix. |
 | `nats.url` | `NATS_URL` | `nats://localhost:4222` | Comma-separated server list. |
 | `nats.creds` | `NATS_CREDS` | none | **Required.** The account user's creds file. |
 | `nats.js_domain` | `NATS_JS_DOMAIN` | empty | See above. |
@@ -135,7 +135,7 @@ nats kv put atv_devices site-a.living-room '{"host":"192.168.1.40","name":"Livin
 | `host` | required | IP address or hostname. Ports 6466 (commands) and 6467 (pairing). |
 | `name` | optional | Display name. Defaults to the device id. |
 
-The device id (`living-room`) uses `a-z 0-9 - _`, so it's one subject token. Unknown fields are errors: a bad record writes `{"error": "..."}` to the TV's state key instead of starting it.
+The device id (`living-room`) uses `A-Z a-z 0-9 - _`, so it's one subject token. Ids are case-sensitive, as subjects and KV keys are. Unknown fields are errors: a bad record writes `{"error": "..."}` to the TV's state key instead of starting it.
 
 | You | The bridge |
 |---|---|

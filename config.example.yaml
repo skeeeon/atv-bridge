@@ -3,7 +3,7 @@
 # that overrides it (see docs/atv-bridge.md). TVs are not listed here: they
 # live in the devices KV bucket.
 
-bridge_id: site-a                   # required; a-z, 0-9, - and _
+bridge_id: site-a                   # required; A-Z, a-z, 0-9, - and _; case-sensitive
 
 nats:
   url: nats://localhost:4222        # a local leaf node, or the hub: tls://hub-1:4222,tls://hub-2:4222

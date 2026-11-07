@@ -88,3 +88,20 @@ func TestEveryProblemReported(t *testing.T) {
 		}
 	}
 }
+
+func TestIDs(t *testing.T) {
+	for _, id := range []string{"site-a", "ATV-V7Q-NB9", "Lounge_2"} {
+		if !ValidToken(id) {
+			t.Errorf("%q should be a valid id", id)
+		}
+	}
+	for _, id := range []string{"", "site.a", "site a", "site*", "site>", "café"} {
+		if ValidToken(id) {
+			t.Errorf("%q should be rejected", id)
+		}
+	}
+	c, err := Load("", envOf(map[string]string{"BRIDGE_ID": "ATV-V7Q-NB9", "NATS_CREDS": "/x.creds"}))
+	if err != nil || c.BridgeID != "ATV-V7Q-NB9" {
+		t.Fatalf("platform-style bridge id: %v, %q", err, c.BridgeID)
+	}
+}

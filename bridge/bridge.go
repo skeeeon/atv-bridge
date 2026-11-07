@@ -205,7 +205,7 @@ func (b *Bridge) handle(e jetstream.KeyValueEntry) {
 		return
 	}
 	if !validDeviceID(id) {
-		b.log.Warn("ignoring device key: the id must use only a-z, 0-9, - and _", "key", e.Key())
+		b.log.Warn("ignoring device key: the id must use only A-Z, a-z, 0-9, - and _", "key", e.Key())
 		return
 	}
 	rec, err := ParseRecord(e.Value())

@@ -123,7 +123,7 @@ func applyEnv(c *Config, getenv func(string) string) error {
 
 // tokenRE matches a value that is one NATS subject token and one KV key
 // segment: no dots, no wildcards, no spaces.
-var tokenRE = regexp.MustCompile(`^[a-z0-9_-]+$`)
+var tokenRE = regexp.MustCompile(`^[A-Za-z0-9_-]+$`)
 
 // ValidToken reports whether s can be a bridge or device id.
 func ValidToken(s string) bool { return tokenRE.MatchString(s) }
@@ -135,7 +135,7 @@ func (c Config) validate() error {
 	case c.BridgeID == "":
 		add("bridge_id (BRIDGE_ID) is required")
 	case !ValidToken(c.BridgeID):
-		add("bridge_id %q must use only a-z, 0-9, - and _", c.BridgeID)
+		add("bridge_id %q must use only A-Z, a-z, 0-9, - and _", c.BridgeID)
 	}
 	if c.NATS.Creds == "" {
 		add("nats.creds (NATS_CREDS) is required: the path to the account user's creds file")

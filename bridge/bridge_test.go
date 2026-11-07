@@ -485,3 +485,51 @@ func (w testWriter) Write(p []byte) (int, error) {
 	w.t.Log(strings.TrimSpace(string(p)))
 	return len(p), nil
 }
+
+// A platform-generated code works as a bridge id and a device id: subjects
+// and KV keys keep its case.
+func TestUppercaseIDs(t *testing.T) {
+	s := runServer(t, nil)
+	admin := connect(t, s)
+	e := &env{t: t, nc: admin, tv: faketv.New(t)}
+	opts := testOptions(e.tv, t.TempDir())
+	opts.BridgeID = "ATV-V7Q-NB9"
+	e.b = New(opts, slog.New(slog.NewTextHandler(testWriter{t}, nil)), NewMetrics(prometheus.NewRegistry()))
+	if err := e.b.Start(context.Background(), connect(t, s)); err != nil {
+		t.Fatal(err)
+	}
+	t.Cleanup(e.b.Stop)
+	svc, err := e.b.AddService("0.1.0")
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Cleanup(func() { _ = svc.Stop() })
+	e.bindBuckets()
+	e.acceptAll()
+
+	if _, err := e.devicesKV.Put(context.Background(), "ATV-V7Q-NB9.TV-K2P", []byte(`{"host":"127.0.0.1"}`)); err != nil {
+		t.Fatal(err)
+	}
+	deadline := time.Now().Add(5 * time.Second)
+	for {
+		if entry, err := e.stateKV.Get(context.Background(), "ATV-V7Q-NB9.TV-K2P"); err == nil {
+			var st State
+			_ = json.Unmarshal(entry.Value(), &st)
+			if connected(st) {
+				break
+			}
+		}
+		if time.Now().After(deadline) {
+			t.Fatal("TV-K2P never connected")
+		}
+		time.Sleep(10 * time.Millisecond)
+	}
+	e.mustOK("atv.ATV-V7Q-NB9.TV-K2P.key", `{"key":"HOME"}`)
+	if m := e.received().GetRemoteKeyInject(); m.GetKeyCode() != pb.RemoteKeyCode_KEYCODE_HOME {
+		t.Errorf("key: %v", m)
+	}
+	// Subjects are case-sensitive: the lowercase bridge is another bridge.
+	if _, err := e.nc.Request("atv.atv-v7q-nb9.TV-K2P.key", []byte(`{"key":"HOME"}`), time.Second); !errors.Is(err, nats.ErrNoResponders) {
+		t.Errorf("lowercase subject: want no responders, have %v", err)
+	}
+}
