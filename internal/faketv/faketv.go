@@ -25,8 +25,8 @@ import (
 
 	"google.golang.org/protobuf/proto"
 
-	pb "github.com/stone-age-io/atv-bridge/third_party/atvremote/proto"
-	"github.com/stone-age-io/atv-bridge/third_party/atvremote/remote"
+	pb "github.com/skeeeon/atv-bridge/third_party/atvremote/proto"
+	"github.com/skeeeon/atv-bridge/third_party/atvremote/remote"
 )
 
 type TV struct {

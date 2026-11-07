@@ -20,6 +20,8 @@ nats req atv.site-a.living-room.launch '{"app":"com.google.android.youtube.tv"}'
 
 It follows the conventions of [stone-age-io/services](https://github.com/stone-age-io/services): one creds file, `/api/ready` and `/metrics`, a `nats micro` service, and one multi-arch image.
 
+atv-bridge is an independent integration, not part of the Stone-Age.io project. It uses only what the platform offers any tenant: a NATS creds file, subjects, KV buckets and the console's dashboard format. Nothing in it needs platform credentials or changes to the platform.
+
 ## Develop
 
 ```bash

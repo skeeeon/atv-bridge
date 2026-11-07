@@ -3,7 +3,7 @@ package remote
 import (
 	"testing"
 
-	pb "github.com/stone-age-io/atv-bridge/third_party/atvremote/proto"
+	pb "github.com/skeeeon/atv-bridge/third_party/atvremote/proto"
 )
 
 func TestParseKeyCode(t *testing.T) {

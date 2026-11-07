@@ -36,7 +36,7 @@ docker run -d --name atv-bridge --restart unless-stopped \
   -v atv-creds:/creds:ro \
   -v atv-session:/session \
   -p 8080:8080 \
-  ghcr.io/stone-age-io/atv-bridge:latest
+  ghcr.io/skeeeon/atv-bridge:latest
 ```
 
 Images are published for `linux/amd64` and `linux/arm64`. Pin a version tag in production.
@@ -48,7 +48,7 @@ Images are published for `linux/amd64` and `linux/arm64`. Pin a version tag in p
 
 ### Binary
 
-Download an archive from the [releases page](https://github.com/stone-age-io/atv-bridge/releases), or build from source:
+Download an archive from the [releases page](https://github.com/skeeeon/atv-bridge/releases), or build from source:
 
 ```bash
 go build -o bin/atv-bridge ./cmd/atv-bridge
@@ -161,7 +161,7 @@ The TV connects as soon as `pair.finish` succeeds.
 To find TVs on the LAN, run `discover` on the gateway. In a container it needs host networking for mDNS:
 
 ```bash
-docker run --rm --network host ghcr.io/stone-age-io/atv-bridge:latest discover
+docker run --rm --network host ghcr.io/skeeeon/atv-bridge:latest discover
 ```
 
 ```json

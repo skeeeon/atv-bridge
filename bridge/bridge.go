@@ -20,8 +20,8 @@ import (
 	"github.com/nats-io/nats.go"
 	"github.com/nats-io/nats.go/jetstream"
 
-	"github.com/stone-age-io/atv-bridge/internal/health"
-	"github.com/stone-age-io/atv-bridge/third_party/atvremote/remote"
+	"github.com/skeeeon/atv-bridge/internal/health"
+	"github.com/skeeeon/atv-bridge/third_party/atvremote/remote"
 )
 
 type Options struct {

@@ -16,7 +16,7 @@ v1, the CLI and `pkg/common` are not copied: the bridge speaks v2 only.
 ## Local patches
 
 1. The `proto` import path in `remote/*.go` is rewritten to
-   `github.com/stone-age-io/atv-bridge/third_party/atvremote/proto`.
+   `github.com/skeeeon/atv-bridge/third_party/atvremote/proto`.
 
 Nothing else is changed. The generated `.pb.go` files and the `.proto`
 sources are byte-for-byte upstream, including the upstream `go_package`

@@ -10,8 +10,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/stone-age-io/atv-bridge/config"
-	"github.com/stone-age-io/atv-bridge/third_party/atvremote/remote"
+	"github.com/skeeeon/atv-bridge/config"
+	"github.com/skeeeon/atv-bridge/third_party/atvremote/remote"
 )
 
 // Record is one TV in the devices bucket.

@@ -1,4 +1,4 @@
-module github.com/stone-age-io/atv-bridge
+module github.com/skeeeon/atv-bridge
 
 go 1.26.0
 

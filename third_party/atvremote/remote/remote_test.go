@@ -15,7 +15,7 @@ import (
 	"testing"
 	"time"
 
-	pb "github.com/stone-age-io/atv-bridge/third_party/atvremote/proto"
+	pb "github.com/skeeeon/atv-bridge/third_party/atvremote/proto"
 )
 
 // fakeAndroidTV is a TLS server speaking the varint framed protobuf protocol

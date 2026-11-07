@@ -50,11 +50,11 @@ changelog:
 
 release:
   github:
-    owner: stone-age-io
+    owner: skeeeon
     name: atv-bridge
   header: |
     ## atv-bridge {{ .Tag }}
 
     Controls Google TV and Android TV devices over NATS. Linux binary
     archives are below; the container image is
-    `ghcr.io/stone-age-io/atv-bridge:{{ .Tag }}`.
+    `ghcr.io/skeeeon/atv-bridge:{{ .Tag }}`.

@@ -15,9 +15,9 @@ import (
 	"github.com/nats-io/nats.go/jetstream"
 	"github.com/prometheus/client_golang/prometheus"
 
-	"github.com/stone-age-io/atv-bridge/internal/faketv"
-	"github.com/stone-age-io/atv-bridge/internal/health"
-	pb "github.com/stone-age-io/atv-bridge/third_party/atvremote/proto"
+	"github.com/skeeeon/atv-bridge/internal/faketv"
+	"github.com/skeeeon/atv-bridge/internal/health"
+	pb "github.com/skeeeon/atv-bridge/third_party/atvremote/proto"
 )
 
 type env struct {

@@ -11,8 +11,8 @@ import (
 
 	"github.com/nats-io/nats.go/micro"
 
-	pb "github.com/stone-age-io/atv-bridge/third_party/atvremote/proto"
-	"github.com/stone-age-io/atv-bridge/third_party/atvremote/remote"
+	pb "github.com/skeeeon/atv-bridge/third_party/atvremote/proto"
+	"github.com/skeeeon/atv-bridge/third_party/atvremote/remote"
 )
 
 // AddService registers the bridge as a NATS micro service. Every endpoint has

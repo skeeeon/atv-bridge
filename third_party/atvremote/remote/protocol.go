@@ -9,7 +9,7 @@ import (
 	"time"
 	"unicode/utf8"
 
-	pb "github.com/stone-age-io/atv-bridge/third_party/atvremote/proto"
+	pb "github.com/skeeeon/atv-bridge/third_party/atvremote/proto"
 	"google.golang.org/protobuf/proto"
 )
 

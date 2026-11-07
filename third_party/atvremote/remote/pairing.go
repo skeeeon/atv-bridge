@@ -10,7 +10,7 @@ import (
 	"log/slog"
 	"math/big"
 
-	pb "github.com/stone-age-io/atv-bridge/third_party/atvremote/proto"
+	pb "github.com/skeeeon/atv-bridge/third_party/atvremote/proto"
 )
 
 // pairingSession implements the pairing protocol with an Android TV.

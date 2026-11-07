@@ -22,11 +22,11 @@ import (
 
 	"github.com/prometheus/client_golang/prometheus"
 
-	"github.com/stone-age-io/atv-bridge/bridge"
-	"github.com/stone-age-io/atv-bridge/config"
-	"github.com/stone-age-io/atv-bridge/internal/health"
-	"github.com/stone-age-io/atv-bridge/internal/natsconn"
-	"github.com/stone-age-io/atv-bridge/third_party/atvremote/remote"
+	"github.com/skeeeon/atv-bridge/bridge"
+	"github.com/skeeeon/atv-bridge/config"
+	"github.com/skeeeon/atv-bridge/internal/health"
+	"github.com/skeeeon/atv-bridge/internal/natsconn"
+	"github.com/skeeeon/atv-bridge/third_party/atvremote/remote"
 )
 
 // version is set at build time with -ldflags "-X main.version=...".

@@ -6,8 +6,8 @@ import (
 	"strings"
 	"testing"
 
-	pb "github.com/stone-age-io/atv-bridge/third_party/atvremote/proto"
-	"github.com/stone-age-io/atv-bridge/third_party/atvremote/remote"
+	pb "github.com/skeeeon/atv-bridge/third_party/atvremote/proto"
+	"github.com/skeeeon/atv-bridge/third_party/atvremote/remote"
 )
 
 // docs/keys.md lists every key the protocol defines and names common ones in

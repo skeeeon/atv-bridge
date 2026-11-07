@@ -19,7 +19,7 @@ import (
 	"sync"
 	"time"
 
-	pb "github.com/stone-age-io/atv-bridge/third_party/atvremote/proto"
+	pb "github.com/skeeeon/atv-bridge/third_party/atvremote/proto"
 )
 
 // oidDNQualifier is the ASN.1 object identifier of the dnQualifier attribute.

@@ -56,7 +56,7 @@ jobs:
       - name: Compute image tags
         id: tags
         run: |
-          image=ghcr.io/stone-age-io/atv-bridge
+          image=ghcr.io/skeeeon/atv-bridge
           tags="$image:$GITHUB_REF_NAME"
           case "$GITHUB_REF_NAME" in
             *-*) echo "prerelease tag, holding :latest at its current image" ;;
@@ -77,6 +77,6 @@ jobs:
             VERSION=${{ steps.tags.outputs.version }}
           tags: ${{ steps.tags.outputs.tags }}
           labels: |
-            org.opencontainers.image.source=https://github.com/stone-age-io/atv-bridge
+            org.opencontainers.image.source=https://github.com/skeeeon/atv-bridge
           cache-from: type=gha
           cache-to: type=gha,mode=max
