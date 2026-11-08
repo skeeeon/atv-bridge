@@ -79,8 +79,21 @@ nats req atv.site-a.living-room.launch '{"app":"https://www.netflix.com/title/80
 
 `app` is one of:
 
-- **A package id**, such as `com.google.android.youtube.tv`. The bridge sends it as `market://launch?id=<package>`, which opens the app if it's installed.
-- **A link**: anything with a scheme, such as an `https://` deep link. It's sent as is, and the TV opens whichever app claims it. That's how you open a specific title or channel.
+- **A link**: anything with a scheme, such as an `https://` deep link. It's sent as is, and the TV opens whichever app claims it. That's how you open a specific title or channel. Prefer this.
+- **A package id**, such as `com.google.android.youtube.tv`. The bridge sends it as `market://launch?id=<package>`, which the Play Store turns into opening the app. **Some TVs ignore it**: a TCL Google TV (Smart TV Pro) replies OK and does nothing. Test it on your TV, and use a link if it doesn't work.
+
+The bridge's `ok` only means the TV received the request; it doesn't confirm that the app opened. To check, read `.app` in the TV's state a few seconds later.
+
+Links that open the app's home screen, tested on that TCL:
+
+| App | Link |
+|---|---|
+| YouTube | `https://www.youtube.com` |
+| Netflix | `https://www.netflix.com/browse` |
+| Prime Video | `https://app.primevideo.com` |
+| Hulu | `https://www.hulu.com/hub/home` |
+
+An app claims only the links its manifest lists, often by path. Hulu opens for `https://www.hulu.com/hub/home`, `/watch` and `/live-tv` but not for `https://www.hulu.com` or `hulu://`. If an app's homepage doesn't open it, try a path from its website.
 
 **To find an app's package id**, open the app on the TV and read the state:
 

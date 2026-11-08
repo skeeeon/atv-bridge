@@ -342,14 +342,14 @@
           "type": "buttonpad",
           "buttonpadConfig": {
             "rows": 1,
-            "cols": 3,
+            "cols": 4,
             "cells": [
               {
                 "row": 0,
                 "col": 0,
                 "label": "YouTube",
                 "subject": "atv.{{tv}}.launch",
-                "payload": "{\"app\":\"com.google.android.youtube.tv\"}",
+                "payload": "{\"app\":\"https://www.youtube.com\"}",
                 "color": "#dc2626"
               },
               {
@@ -357,7 +357,7 @@
                 "col": 1,
                 "label": "Netflix",
                 "subject": "atv.{{tv}}.launch",
-                "payload": "{\"app\":\"com.netflix.ninja\"}",
+                "payload": "{\"app\":\"https://www.netflix.com/browse\"}",
                 "color": "#b91c1c"
               },
               {
@@ -365,8 +365,16 @@
                 "col": 2,
                 "label": "Prime Video",
                 "subject": "atv.{{tv}}.launch",
-                "payload": "{\"app\":\"com.amazon.amazonvideo.livingroom\"}",
+                "payload": "{\"app\":\"https://app.primevideo.com\"}",
                 "color": "#0369a1"
+              },
+              {
+                "row": 0,
+                "col": 3,
+                "label": "Hulu",
+                "subject": "atv.{{tv}}.launch",
+                "payload": "{\"app\":\"https://www.hulu.com/hub/home\"}",
+                "color": "#15803d"
               }
             ]
           }

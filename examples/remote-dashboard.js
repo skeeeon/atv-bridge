@@ -33,7 +33,9 @@ const pad = (title, x, y, w, h, cells) => ({
   },
 })
 const key = (label, k, color) => [label, 'key', { key: k }, color]
-const app = (label, pkg, color) => [label, 'launch', { app: pkg }, color]
+// Links, not package ids: some TVs (a TCL Google TV, for one) ignore the
+// market://launch link the bridge builds from a package id.
+const app = (label, link, color) => [label, 'launch', { app: link }, color]
 
 const status = (title, x, y, path, mappings) => ({
   ...common(title, x, y, 3, 2), type: 'status', jsonPath: path,
@@ -90,9 +92,10 @@ const widgets = [
 
   // Row 10: apps
   pad('Apps', 0, 10, 12, 2, [[
-    app('YouTube', 'com.google.android.youtube.tv', RED),
-    app('Netflix', 'com.netflix.ninja', '#b91c1c'),
-    app('Prime Video', 'com.amazon.amazonvideo.livingroom', '#0369a1'),
+    app('YouTube', 'https://www.youtube.com', RED),
+    app('Netflix', 'https://www.netflix.com/browse', '#b91c1c'),
+    app('Prime Video', 'https://app.primevideo.com', '#0369a1'),
+    app('Hulu', 'https://www.hulu.com/hub/home', '#15803d'),
   ]]),
 
   // Row 12: typing

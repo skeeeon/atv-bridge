@@ -190,7 +190,7 @@ nats req atv.site-a.living-room.power '{"on":false}'
 |---|---|---|
 | `atv.{bridge}.{device}.key` | `{"key": "HOME", "direction": "SHORT"}` | Sends one key. Names are case-insensitive, and `KEYCODE_` is optional. `direction` is `SHORT` (default), `START_LONG` or `END_LONG`, in any case. See [keys](keys.md). |
 | `atv.{bridge}.{device}.text` | `{"text": "..."}` | Types into the focused field. |
-| `atv.{bridge}.{device}.launch` | `{"app": "..."}` | Opens an app link, or a package id such as `com.google.android.youtube.tv`. |
+| `atv.{bridge}.{device}.launch` | `{"app": "..."}` | Opens an app link, or a package id such as `com.google.android.youtube.tv`. Some TVs ignore package ids, so prefer links ([apps](keys.md#3-launching-apps)). |
 | `atv.{bridge}.{device}.power` | `{"on": true}` | Sends POWER only when the TV's state differs. Replies `{"ok": true, "changed": false}` when it didn't need to. |
 | `atv.{bridge}.{device}.state` | empty | The TV's live state, the same shape as KV. |
 | `atv.{bridge}.{device}.pair.start` | empty | Asks the TV to show a pairing code. |
