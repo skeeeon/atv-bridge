@@ -1,8 +1,20 @@
-// Generates a platform dashboard export: a remote for one atv-bridge TV.
-// Usage: node remote-dashboard.js <bridge_id> <device_id> [title] > remote.dashboard.json
-const [BRIDGE = 'ATV-V7Q-NB9', DEVICE = 'bedroom', TITLE = 'Bedroom TV remote'] = process.argv.slice(2)
-const base = `atv.${BRIDGE}.${DEVICE}`
-const stateKey = `${BRIDGE}.${DEVICE}`
+// Generates a platform dashboard export: a remote for atv-bridge TVs. A `tv`
+// select variable picks the TV, so one dashboard covers them all.
+// Usage: node remote-dashboard.js <bridge>.<device> [<bridge>.<device> ...] > tv-remote.dashboard.json
+// The first TV is the default.
+const tvs = process.argv.slice(2)
+if (tvs.length === 0) tvs.push('ATV-V7Q-NB9.bedroom')
+for (const tv of tvs) {
+  // Bridge and device ids are [A-Za-z0-9_-]+ (config/config.go), so one dot.
+  if (!/^[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+$/.test(tv)) {
+    console.error(`not a <bridge>.<device> id: ${tv}`)
+    process.exit(1)
+  }
+}
+
+// {{tv}} is the TV's key in atv_state and the middle of its subjects.
+const base = 'atv.{{tv}}'
+const stateKey = '{{tv}}'
 let n = 0
 const id = () => `widget_remote_${++n}`
 const common = (title, x, y, w, h) => ({ id: id(), title, x, y, w, h, dataSource: { type: 'subscription' }, buffer: { maxCount: 10 } })
@@ -90,8 +102,10 @@ const widgets = [
 
 const now = Date.now()
 const out = { version: '1.0', dashboards: [{
-  id: `dashboard_${DEVICE}_remote`, name: TITLE,
-  description: `Remote for ${DEVICE} on atv-bridge ${BRIDGE}. Needs publish on ${base}.> and read on the atv_state KV bucket.`,
-  created: now, modified: now, widgets, variables: [], isLocked: true, storage: 'local', columnCount: 12,
+  id: 'dashboard_tv_remote', name: 'TV remote',
+  description: 'Remote for atv-bridge TVs. Pick the TV in the variable bar; each option is <bridge>.<device>, the TV\'s key in atv_state. Needs publish on atv.<bridge>.<device>.> for each TV and read on the atv_state KV bucket.',
+  created: now, modified: now, widgets,
+  variables: [{ id: 'var_tv', name: 'tv', label: 'TV', type: 'select', options: tvs, defaultValue: tvs[0] }],
+  isLocked: true, storage: 'local', columnCount: 12,
 }] }
 process.stdout.write(JSON.stringify(out, null, 2) + '\n')

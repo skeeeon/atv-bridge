@@ -2,11 +2,11 @@
   "version": "1.0",
   "dashboards": [
     {
-      "id": "dashboard_bedroom_remote",
-      "name": "Bedroom TV remote",
-      "description": "Remote for bedroom on atv-bridge ATV-V7Q-NB9. Needs publish on atv.ATV-V7Q-NB9.bedroom.> and read on the atv_state KV bucket.",
-      "created": 1794093149231,
-      "modified": 1794093149231,
+      "id": "dashboard_tv_remote",
+      "name": "TV remote",
+      "description": "Remote for atv-bridge TVs. Pick the TV in the variable bar; each option is <bridge>.<device>, the TV's key in atv_state. Needs publish on atv.<bridge>.<device>.> for each TV and read on the atv_state KV bucket.",
+      "created": 1794097902871,
+      "modified": 1794097902871,
       "widgets": [
         {
           "id": "widget_remote_1",
@@ -18,7 +18,7 @@
           "dataSource": {
             "type": "kv",
             "kvBucket": "atv_state",
-            "kvKey": "ATV-V7Q-NB9.bedroom"
+            "kvKey": "{{tv}}"
           },
           "buffer": {
             "maxCount": 10
@@ -57,7 +57,7 @@
           "dataSource": {
             "type": "kv",
             "kvBucket": "atv_state",
-            "kvKey": "ATV-V7Q-NB9.bedroom"
+            "kvKey": "{{tv}}"
           },
           "buffer": {
             "maxCount": 10
@@ -108,7 +108,7 @@
                 "row": 0,
                 "col": 0,
                 "label": "On",
-                "subject": "atv.ATV-V7Q-NB9.bedroom.power",
+                "subject": "atv.{{tv}}.power",
                 "payload": "{\"on\":true}",
                 "color": "#16a34a"
               },
@@ -116,7 +116,7 @@
                 "row": 0,
                 "col": 1,
                 "label": "Off",
-                "subject": "atv.ATV-V7Q-NB9.bedroom.power",
+                "subject": "atv.{{tv}}.power",
                 "payload": "{\"on\":false}",
                 "color": "#dc2626"
               }
@@ -133,7 +133,7 @@
           "dataSource": {
             "type": "kv",
             "kvBucket": "atv_state",
-            "kvKey": "ATV-V7Q-NB9.bedroom"
+            "kvKey": "{{tv}}"
           },
           "buffer": {
             "maxCount": 10
@@ -165,7 +165,7 @@
                 "row": 0,
                 "col": 0,
                 "label": "Back",
-                "subject": "atv.ATV-V7Q-NB9.bedroom.key",
+                "subject": "atv.{{tv}}.key",
                 "payload": "{\"key\":\"BACK\"}",
                 "color": "#475569"
               },
@@ -173,7 +173,7 @@
                 "row": 0,
                 "col": 1,
                 "label": "↑",
-                "subject": "atv.ATV-V7Q-NB9.bedroom.key",
+                "subject": "atv.{{tv}}.key",
                 "payload": "{\"key\":\"DPAD_UP\"}",
                 "color": "#2563eb"
               },
@@ -181,7 +181,7 @@
                 "row": 0,
                 "col": 2,
                 "label": "Home",
-                "subject": "atv.ATV-V7Q-NB9.bedroom.key",
+                "subject": "atv.{{tv}}.key",
                 "payload": "{\"key\":\"HOME\"}",
                 "color": "#475569"
               },
@@ -189,7 +189,7 @@
                 "row": 1,
                 "col": 0,
                 "label": "←",
-                "subject": "atv.ATV-V7Q-NB9.bedroom.key",
+                "subject": "atv.{{tv}}.key",
                 "payload": "{\"key\":\"DPAD_LEFT\"}",
                 "color": "#2563eb"
               },
@@ -197,7 +197,7 @@
                 "row": 1,
                 "col": 1,
                 "label": "OK",
-                "subject": "atv.ATV-V7Q-NB9.bedroom.key",
+                "subject": "atv.{{tv}}.key",
                 "payload": "{\"key\":\"DPAD_CENTER\"}",
                 "color": "#7c3aed"
               },
@@ -205,7 +205,7 @@
                 "row": 1,
                 "col": 2,
                 "label": "→",
-                "subject": "atv.ATV-V7Q-NB9.bedroom.key",
+                "subject": "atv.{{tv}}.key",
                 "payload": "{\"key\":\"DPAD_RIGHT\"}",
                 "color": "#2563eb"
               },
@@ -213,7 +213,7 @@
                 "row": 2,
                 "col": 0,
                 "label": "Menu",
-                "subject": "atv.ATV-V7Q-NB9.bedroom.key",
+                "subject": "atv.{{tv}}.key",
                 "payload": "{\"key\":\"MENU\"}",
                 "color": "#475569"
               },
@@ -221,7 +221,7 @@
                 "row": 2,
                 "col": 1,
                 "label": "↓",
-                "subject": "atv.ATV-V7Q-NB9.bedroom.key",
+                "subject": "atv.{{tv}}.key",
                 "payload": "{\"key\":\"DPAD_DOWN\"}",
                 "color": "#2563eb"
               },
@@ -229,7 +229,7 @@
                 "row": 2,
                 "col": 2,
                 "label": "Settings",
-                "subject": "atv.ATV-V7Q-NB9.bedroom.key",
+                "subject": "atv.{{tv}}.key",
                 "payload": "{\"key\":\"SETTINGS\"}",
                 "color": "#475569"
               }
@@ -258,7 +258,7 @@
                 "row": 0,
                 "col": 0,
                 "label": "Rewind",
-                "subject": "atv.ATV-V7Q-NB9.bedroom.key",
+                "subject": "atv.{{tv}}.key",
                 "payload": "{\"key\":\"MEDIA_REWIND\"}",
                 "color": "#0f766e"
               },
@@ -266,7 +266,7 @@
                 "row": 0,
                 "col": 1,
                 "label": "Play/Pause",
-                "subject": "atv.ATV-V7Q-NB9.bedroom.key",
+                "subject": "atv.{{tv}}.key",
                 "payload": "{\"key\":\"MEDIA_PLAY_PAUSE\"}",
                 "color": "#0f766e"
               },
@@ -274,7 +274,7 @@
                 "row": 0,
                 "col": 2,
                 "label": "Forward",
-                "subject": "atv.ATV-V7Q-NB9.bedroom.key",
+                "subject": "atv.{{tv}}.key",
                 "payload": "{\"key\":\"MEDIA_FAST_FORWARD\"}",
                 "color": "#0f766e"
               }
@@ -303,7 +303,7 @@
                 "row": 0,
                 "col": 0,
                 "label": "Vol −",
-                "subject": "atv.ATV-V7Q-NB9.bedroom.key",
+                "subject": "atv.{{tv}}.key",
                 "payload": "{\"key\":\"VOLUME_DOWN\"}",
                 "color": "#475569"
               },
@@ -311,7 +311,7 @@
                 "row": 0,
                 "col": 1,
                 "label": "Mute",
-                "subject": "atv.ATV-V7Q-NB9.bedroom.key",
+                "subject": "atv.{{tv}}.key",
                 "payload": "{\"key\":\"VOLUME_MUTE\"}",
                 "color": "#475569"
               },
@@ -319,7 +319,7 @@
                 "row": 0,
                 "col": 2,
                 "label": "Vol +",
-                "subject": "atv.ATV-V7Q-NB9.bedroom.key",
+                "subject": "atv.{{tv}}.key",
                 "payload": "{\"key\":\"VOLUME_UP\"}",
                 "color": "#475569"
               }
@@ -348,7 +348,7 @@
                 "row": 0,
                 "col": 0,
                 "label": "YouTube",
-                "subject": "atv.ATV-V7Q-NB9.bedroom.launch",
+                "subject": "atv.{{tv}}.launch",
                 "payload": "{\"app\":\"com.google.android.youtube.tv\"}",
                 "color": "#dc2626"
               },
@@ -356,7 +356,7 @@
                 "row": 0,
                 "col": 1,
                 "label": "Netflix",
-                "subject": "atv.ATV-V7Q-NB9.bedroom.launch",
+                "subject": "atv.{{tv}}.launch",
                 "payload": "{\"app\":\"com.netflix.ninja\"}",
                 "color": "#b91c1c"
               },
@@ -364,7 +364,7 @@
                 "row": 0,
                 "col": 2,
                 "label": "Prime Video",
-                "subject": "atv.ATV-V7Q-NB9.bedroom.launch",
+                "subject": "atv.{{tv}}.launch",
                 "payload": "{\"app\":\"com.amazon.amazonvideo.livingroom\"}",
                 "color": "#0369a1"
               }
@@ -386,14 +386,25 @@
           },
           "type": "publisher",
           "publisherConfig": {
-            "defaultSubject": "atv.ATV-V7Q-NB9.bedroom.text",
+            "defaultSubject": "atv.{{tv}}.text",
             "defaultPayload": "{\"text\": \"type here\"}",
             "history": [],
             "timeout": 2000
           }
         }
       ],
-      "variables": [],
+      "variables": [
+        {
+          "id": "var_tv",
+          "name": "tv",
+          "label": "TV",
+          "type": "select",
+          "options": [
+            "ATV-V7Q-NB9.bedroom"
+          ],
+          "defaultValue": "ATV-V7Q-NB9.bedroom"
+        }
+      ],
       "isLocked": true,
       "storage": "local",
       "columnCount": 12
