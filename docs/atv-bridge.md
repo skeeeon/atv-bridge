@@ -174,6 +174,8 @@ docker run --rm --network host ghcr.io/skeeeon/atv-bridge:latest discover
 
 Every command is a request. The reply is `{"ok": true}`, or a micro error with a code in the `Nats-Service-Error-Code` header.
 
+A plain publish (no reply subject), like a console button, works too: the command runs and no reply is sent. A failed command is then only logged and counted in `atv_commands_total`.
+
 **[Keys and Apps](keys.md)** lists every key name, the common ones grouped by what they do, long presses, and how to find an app's package id.
 
 ```bash

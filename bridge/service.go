@@ -86,10 +86,22 @@ func (b *Bridge) deviceEndpoint(verb string, fn deviceHandler) micro.HandlerFunc
 func (b *Bridge) reply(req micro.Request, verb string, res any, e *reqError) {
 	if e != nil {
 		b.m.commands.WithLabelValues(verb, e.code).Inc()
+	} else {
+		b.m.commands.WithLabelValues(verb, "ok").Inc()
+	}
+	// A plain publish, like a console button, has no reply subject. The
+	// command has still run; replying would fail and nats micro would count
+	// it as an endpoint error ("no reply").
+	if req.Reply() == "" {
+		if e != nil {
+			b.log.Warn("command failed", "subject", req.Subject(), "code", e.code, "error", e.msg)
+		}
+		return
+	}
+	if e != nil {
 		_ = req.Error(e.code, e.msg, nil)
 		return
 	}
-	b.m.commands.WithLabelValues(verb, "ok").Inc()
 	if res == nil {
 		res = map[string]any{"ok": true}
 	}

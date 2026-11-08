@@ -13,6 +13,7 @@ import (
 	natstest "github.com/nats-io/nats-server/v2/test"
 	"github.com/nats-io/nats.go"
 	"github.com/nats-io/nats.go/jetstream"
+	"github.com/nats-io/nats.go/micro"
 	"github.com/prometheus/client_golang/prometheus"
 
 	"github.com/skeeeon/atv-bridge/internal/faketv"
@@ -27,6 +28,7 @@ type env struct {
 	stateKV   jetstream.KeyValue
 	tv        *faketv.TV
 	b         *Bridge
+	svc       micro.Service
 }
 
 func runServer(t *testing.T, users []*server.User) *server.Server {
@@ -92,6 +94,7 @@ func newEnvOn(t *testing.T, bridgeNC, admin *nats.Conn) *env {
 		t.Fatal(err)
 	}
 	t.Cleanup(func() { _ = svc.Stop() })
+	e.svc = svc
 	e.bindBuckets()
 	return e
 }
@@ -520,6 +523,7 @@ func TestUppercaseIDs(t *testing.T) {
 		t.Fatal(err)
 	}
 	t.Cleanup(func() { _ = svc.Stop() })
+	e.svc = svc
 	e.bindBuckets()
 	e.acceptAll()
 
@@ -547,5 +551,32 @@ func TestUppercaseIDs(t *testing.T) {
 	// Subjects are case-sensitive: the lowercase bridge is another bridge.
 	if _, err := e.nc.Request("atv.atv-v7q-nb9.TV-K2P.key", []byte(`{"key":"HOME"}`), time.Second); !errors.Is(err, nats.ErrNoResponders) {
 		t.Errorf("lowercase subject: want no responders, have %v", err)
+	}
+}
+
+// A console button publishes without a reply subject. The command runs, and
+// the service counts no error for the reply it can't send.
+func TestPublishWithoutReply(t *testing.T) {
+	e := newEnv(t)
+	e.acceptAll()
+	e.putDevice("lounge", `{"host":"127.0.0.1"}`)
+	e.waitState("lounge", "connected", connected)
+
+	if err := e.nc.Publish("atv.site-a.lounge.key", []byte(`{"key":"home"}`)); err != nil {
+		t.Fatal(err)
+	}
+	if m := e.received().GetRemoteKeyInject(); m.GetKeyCode() != pb.RemoteKeyCode_KEYCODE_HOME {
+		t.Errorf("key: %v", m)
+	}
+	// A failing command without a reply subject isn't a reply error either.
+	if err := e.nc.Publish("atv.site-a.lounge.key", []byte(`{"key":"nope"}`)); err != nil {
+		t.Fatal(err)
+	}
+	e.mustOK("atv.site-a.lounge.state", "") // the publishes before it have been handled
+
+	for _, ep := range e.svc.Stats().Endpoints {
+		if ep.Name == "key" && (ep.NumRequests != 2 || ep.NumErrors != 0) {
+			t.Errorf("key endpoint: %d requests, %d errors (%s)", ep.NumRequests, ep.NumErrors, ep.LastError)
+		}
 	}
 }
