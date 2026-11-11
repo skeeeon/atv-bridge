@@ -409,6 +409,20 @@ func TestTVDropsAndComesBack(t *testing.T) {
 	e.wantCode("atv.site-a.lounge.key", `{"key":"HOME"}`, "503")
 }
 
+// A TV that can't be reached when the bridge starts is unreachable, not
+// unpaired: the bridge has a certificate and the TV hasn't refused it.
+func TestUnreachableAtStartIsNotUnpaired(t *testing.T) {
+	e := newEnv(t)
+	e.acceptAll()
+	e.tv.Close()
+	e.putDevice("lounge", `{"host":"127.0.0.1"}`)
+	e.waitState("lounge", "unreachable", func(s State) bool { return s.Paired && !s.Available })
+	e.wantCode("atv.site-a.lounge.key", `{"key":"HOME"}`, "503")
+	if s, _ := e.state("lounge"); s.status() != "unreachable" {
+		t.Errorf("status = %s, want unreachable", s.status())
+	}
+}
+
 func TestRewriteAllRestoresState(t *testing.T) {
 	e := newEnv(t)
 	e.acceptAll()

@@ -226,7 +226,7 @@ nats kv get atv_state site-a.living-room
 | Field | |
 |---|---|
 | `available` | The bridge is connected to the TV and can send it commands. |
-| `paired` | The TV accepts the bridge's certificate. `false` until paired, and again after a factory reset. |
+| `paired` | The TV accepts the bridge's certificate. `false` until paired, and again after a factory reset. It turns `false` only when the TV refuses the certificate: a TV that can't be reached keeps its last value, and after a restart counts as paired if the bridge has a certificate. |
 | `on`, `app`, `volume`, `device` | As the TV last reported them. Kept while the TV is unavailable. |
 | `error` | Set instead of everything else when the device record is invalid. |
 | `since` | When anything in the record last changed. |

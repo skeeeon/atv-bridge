@@ -469,6 +469,42 @@ func TestConnectInvalidAuth(t *testing.T) {
 	}
 }
 
+func TestConnectHandshakeNotAnswered(t *testing.T) {
+	// A device that accepts the TCP connection but never answers the TLS
+	// handshake is unreachable, not unpaired.
+	ln, err := net.Listen("tcp", "127.0.0.1:0")
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer ln.Close()
+	go func() {
+		for {
+			conn, err := ln.Accept()
+			if err != nil {
+				return
+			}
+			defer conn.Close()
+		}
+	}()
+
+	_, portStr, _ := net.SplitHostPort(ln.Addr().String())
+	port, _ := strconv.Atoi(portStr)
+	dir := t.TempDir()
+	r := New("test-client", filepath.Join(dir, "cert.pem"), filepath.Join(dir, "key.pem"), "127.0.0.1",
+		WithAPIPort(port))
+	if _, err := r.GenerateCertIfMissing(); err != nil {
+		t.Fatal(err)
+	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), 200*time.Millisecond)
+	defer cancel()
+	err = r.Connect(ctx)
+	var cannotConnect *CannotConnect
+	if !errors.As(err, &cannotConnect) {
+		t.Fatalf("Connect = %v, want CannotConnect", err)
+	}
+}
+
 func TestConnectCannotConnect(t *testing.T) {
 	dir := t.TempDir()
 	r := New("test-client", filepath.Join(dir, "cert.pem"), filepath.Join(dir, "key.pem"), "127.0.0.1",

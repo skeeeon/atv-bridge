@@ -86,9 +86,13 @@ func newDevice(b *Bridge, id string, rec Record) *device {
 	if name == "" {
 		name = id
 	}
+	// Until the TV answers, assume it is paired if there is a certificate to
+	// offer it. Only the TV refusing the certificate proves otherwise, so a TV
+	// that is unreachable when the bridge starts shows as unreachable, not as
+	// unpaired.
 	return &device{
 		id: id, rec: rec, b: b,
-		st:    State{Name: name, Host: rec.Host, Since: time.Now().UTC()},
+		st:    State{Name: name, Host: rec.Host, Paired: b.hasCert(), Since: time.Now().UTC()},
 		dirty: make(chan struct{}, 1),
 	}
 }
@@ -182,6 +186,8 @@ func (d *device) writeLoop(ctx context.Context) {
 func (d *device) run(ctx context.Context) {
 	defer d.done.Done()
 	delay := d.b.opts.RetryMin
+	log := d.b.log.With("device", d.id, "host", d.rec.Host)
+	problem := "" // the problem last logged, so each outage logs once
 	for ctx.Err() == nil {
 		r := d.b.newRemote(d.id, d.rec.Host)
 		removeCallbacks := d.watch(r)
@@ -191,6 +197,8 @@ func (d *device) run(ctx context.Context) {
 		cancel()
 		if err == nil {
 			delay = d.b.opts.RetryMin
+			problem = ""
+			log.Info("TV connected")
 			d.serve(ctx, r)
 			removeCallbacks()
 			if !sleep(ctx, d.b.opts.PairRetry) {
@@ -203,13 +211,25 @@ func (d *device) run(ctx context.Context) {
 
 		var invalidAuth *remote.InvalidAuth
 		if errors.As(err, &invalidAuth) {
+			if problem != "unpaired" {
+				problem = "unpaired"
+				log.Warn("TV needs pairing: it does not accept the bridge's certificate", "error", err)
+			}
 			d.update(func(s *State) { s.Available, s.Paired = false, false })
 			if !sleep(ctx, d.b.opts.PairRetry) {
 				return
 			}
 			continue
 		}
-		d.b.log.Debug("connect failed", "device", d.id, "error", err)
+		if ctx.Err() != nil {
+			return
+		}
+		if problem != "unreachable" {
+			problem = "unreachable"
+			log.Warn("cannot connect to TV; retrying", "error", err)
+		} else {
+			log.Debug("connect failed", "error", err)
+		}
 		d.update(func(s *State) { s.Available = false })
 		if !sleep(ctx, delay) {
 			return
@@ -233,6 +253,8 @@ func (d *device) serve(ctx context.Context, r *remote.AndroidTVRemote) {
 	select {
 	case <-ctx.Done():
 	case <-authLost:
+		d.b.log.Warn("TV stopped accepting the bridge's certificate while reconnecting; it needs pairing again",
+			"device", d.id, "host", d.rec.Host)
 		d.update(func(s *State) { s.Available, s.Paired = false, false })
 	}
 	d.mu.Lock()
@@ -267,8 +289,10 @@ func (d *device) watch(r *remote.AndroidTVRemote) (remove func()) {
 		r.AddVolumeInfoUpdatedCallback(func(v remote.VolumeInfo) { d.update(func(s *State) { s.Volume = &v }) }),
 		r.AddIsAvailableUpdatedCallback(func(ok bool) {
 			if ok {
+				d.b.log.Info("TV reconnected", "device", d.id, "host", d.rec.Host)
 				d.refresh(r, true)
 			} else {
+				d.b.log.Warn("TV connection lost; reconnecting", "device", d.id, "host", d.rec.Host)
 				d.update(func(s *State) { s.Available = false })
 			}
 		}),

@@ -22,6 +22,9 @@ import (
 	pb "github.com/skeeeon/atv-bridge/third_party/atvremote/proto"
 )
 
+// reconnectTimeout bounds one reconnect attempt of the reconnect loop.
+const reconnectTimeout = 10 * time.Second
+
 // oidDNQualifier is the ASN.1 object identifier of the dnQualifier attribute.
 var oidDNQualifier = []int{2, 5, 4, 46}
 
@@ -246,8 +249,9 @@ func (r *AndroidTVRemote) loadTLSConfig() (*tls.Config, error) {
 // dialTLS connects to the given port and performs the TLS handshake. A
 // missing client certificate is returned as InvalidAuth and a TCP dial
 // failure as CannotConnect; a handshake failure is returned unwrapped, for
-// the caller to classify (Connect treats it as needing to pair, the pairing
-// port dials as a connection problem).
+// the caller to classify (Connect treats a TLS-level failure as needing to
+// pair and anything else as a connection problem, the pairing port dials
+// always as a connection problem).
 func (r *AndroidTVRemote) dialTLS(ctx context.Context, port int) (*tls.Conn, error) {
 	tlsConfig, err := r.loadTLSConfig()
 	if err != nil {
@@ -303,8 +307,13 @@ func (r *AndroidTVRemote) Connect(ctx context.Context) error {
 		if isClassified(err) {
 			return err
 		}
-		// The handshake failed: the device rejected our certificate.
-		return &InvalidAuth{Message: "need to pair", Err: err}
+		// The handshake failed. Only a TLS-level failure means the device
+		// rejected our certificate; a timeout, EOF or reset means it isn't
+		// answering, which pairing again would not fix.
+		if isTLSError(errors.Unwrap(err)) {
+			return &InvalidAuth{Message: "need to pair", Err: err}
+		}
+		return &CannotConnect{Message: fmt.Sprintf("%s:%d didn't complete the TLS handshake", r.host, r.apiPort), Err: err}
 	}
 	r.logger.Debug("Connected", "peer", tlsConn.RemoteAddr())
 
@@ -397,7 +406,11 @@ func (r *AndroidTVRemote) reconnectLoop(ctx context.Context, invalidAuthCallback
 				return
 			case <-time.After(delay):
 			}
-			err := r.Connect(ctx)
+			// Without a deadline, a device that accepts the TCP connection
+			// but never answers would block this loop forever.
+			attemptCtx, cancelAttempt := context.WithTimeout(ctx, reconnectTimeout)
+			err := r.Connect(attemptCtx)
+			cancelAttempt()
 			if err == nil {
 				r.isAvailableCbs.fire(true)
 				break

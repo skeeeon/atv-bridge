@@ -83,6 +83,16 @@ func New(opts Options, log *slog.Logger, m *Metrics) *Bridge {
 func (b *Bridge) certFile() string { return filepath.Join(b.opts.SessionDir, "client.crt") }
 func (b *Bridge) keyFile() string  { return filepath.Join(b.opts.SessionDir, "client.key") }
 
+// hasCert reports whether the client certificate and its key exist.
+func (b *Bridge) hasCert() bool {
+	for _, f := range []string{b.certFile(), b.keyFile()} {
+		if info, err := os.Stat(f); err != nil || info.IsDir() {
+			return false
+		}
+	}
+	return true
+}
+
 func (b *Bridge) newRemote(id, host string) *remote.AndroidTVRemote {
 	opts := []remote.Option{remote.WithLogger(b.log.With("device", id))}
 	if b.opts.APIPort != 0 {

@@ -18,6 +18,14 @@ v1, the CLI and `pkg/common` are not copied: the bridge speaks v2 only.
 1. The `proto` import path in `remote/*.go` is rewritten to
    `github.com/skeeeon/atv-bridge/third_party/atvremote/proto`.
 
+2. `remote/remote.go`, `Connect`: a failed TLS handshake is `InvalidAuth`
+   only when the failure is a TLS error (the TV's alert). A timeout, EOF or
+   reset is `CannotConnect`. Upstream called every handshake failure
+   `InvalidAuth`, so a TV that hung looked unpaired.
+3. `remote/remote.go`, `reconnectLoop`: each attempt has a 10s deadline
+   (`reconnectTimeout`). Upstream had none, so a TV that accepted the
+   connection and then went silent stopped the loop for good.
+
 Nothing else is changed. The generated `.pb.go` files and the `.proto`
 sources are byte-for-byte upstream, including the upstream `go_package`
 option, so the build never needs `protoc`. If they must be regenerated, pass
